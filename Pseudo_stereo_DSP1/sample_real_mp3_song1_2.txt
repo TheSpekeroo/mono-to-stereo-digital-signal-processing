@@ -1,0 +1,27 @@
+[y,Fs] = audioread("one2.mp3"); % Andrea_Bocelli_&_Sarah_Brightman_-_Time_To_Say_Goodbye
+%[y,Fs] = audioread("seoul_1.mp3"); % Seoul Family
+%[y,Fs] = audioread("Endless_love.mp3"); % Diana Ross & Lionel Ritchie - Endless Love
+%sound(y,Fs);
+sl1=floor(size(y,1)/Fs);	% song time
+%xw_i=y(1:round(size(y,1)/1),1);	% left channel only
+xw_i=y(1:round(size(y,1)/30),1);	% left channel only (20) (30)
+%do_display_fft_Fs(xw_i,Fs)	% before upsampling, SSA
+%sound(xw_i,Fs);	
+%LPF
+%xw_rL=tst_BT6r(Fs,xw_i);	% left channel
+xw_rL=tst_WD1rL(Fs,xw_i);	% LPF(1) and HPF(2)
+sound(xw_rL,Fs);	% LPF
+
+%xw_r=tst_BT6(Fs,Tf,xw_i);
+%
+%HPF
+xw_i=y(1:round(size(y,1)/30),1);	% left channel only (20) (30)
+%do_display_fft_Fs(xw_i,Fs)	% before upsampling, SSA
+%sound(xw_i,Fs);
+figure
+xw_rR=tst_WD1rH(Fs,xw_i);	% LPF(1) and HPF(2)
+sound(xw_rR,Fs);	% HPF
+%xw_r=tst_BT6(Fs,Tf,xw_i);
+%jj_o=[xw_rL xw_rR(1:size(xw_rL,1),1)];	% L/R
+jj_o=[xw_rL*2 xw_rR/20];	% L/R (due to mismatching level)
+sound(jj_o,Fs);		% Psehdo Stereo
